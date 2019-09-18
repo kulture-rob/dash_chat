@@ -110,10 +110,10 @@ class _MessageListViewState extends State<MessageListView> {
                   reverse: widget.inverted,
                   itemCount: widget.messages.length,
                   itemBuilder: (context, i) {
-                    final j = i + 1;
+                    final j = i - 1;
                     bool showAvatar = false;
                     bool showDate;
-                    if (j < widget.messages.length) {
+                    if (j >= 0) {
                       showAvatar = widget.messages[j].user.uid !=
                           widget.messages[i].user.uid;
                     } else {
@@ -190,54 +190,56 @@ class _MessageListViewState extends State<MessageListView> {
                                         width: 40.0,
                                       ),
                               ),
-                              GestureDetector(
-                                onLongPress: () {
-                                  if (widget.onLongPressMessage != null) {
-                                    widget
-                                        .onLongPressMessage(widget.messages[i]);
-                                  } else {
-                                    showBottomSheet(
-                                        context: context,
-                                        builder: (context) => Container(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  ListTile(
-                                                    leading: Icon(
-                                                        Icons.content_copy),
-                                                    title: Text(
-                                                        "Copy to clipboard"),
-                                                    onTap: () {
-                                                      Clipboard.setData(
-                                                          ClipboardData(
-                                                              text: widget
-                                                                  .messages[i]
-                                                                  .text));
-                                                      Navigator.pop(context);
-                                                    },
-                                                  )
-                                                ],
-                                              ),
-                                            ));
-                                  }
-                                },
-                                child: widget.messageBuilder != null
-                                    ? widget.messageBuilder(widget.messages[i])
-                                    : MessageContainer(
-                                        isUser: widget.messages[i].user.uid ==
-                                            widget.user.uid,
-                                        message: widget.messages[i],
-                                        timeFormat: widget.timeFormat,
-                                        messageImageBuilder:
-                                            widget.messageImageBuilder,
-                                        messageTextBuilder:
-                                            widget.messageTextBuilder,
-                                        messageTimeBuilder:
-                                            widget.messageTimeBuilder,
-                                        messageContainerDecoration:
-                                            widget.messageContainerDecoration,
-                                        parsePatterns: widget.parsePatterns,
-                                      ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onLongPress: () {
+                                    if (widget.onLongPressMessage != null) {
+                                      widget
+                                          .onLongPressMessage(widget.messages[i]);
+                                    } else {
+                                      showBottomSheet(
+                                          context: context,
+                                          builder: (context) => Container(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    ListTile(
+                                                      leading: Icon(
+                                                          Icons.content_copy),
+                                                      title: Text(
+                                                          "Copy to clipboard"),
+                                                      onTap: () {
+                                                        Clipboard.setData(
+                                                            ClipboardData(
+                                                                text: widget
+                                                                    .messages[i]
+                                                                    .text));
+                                                        Navigator.pop(context);
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                              ));
+                                    }
+                                  },
+                                  child: widget.messageBuilder != null
+                                      ? widget.messageBuilder(widget.messages[i])
+                                      : MessageContainer(
+                                          isUser: widget.messages[i].user.uid ==
+                                              widget.user.uid,
+                                          message: widget.messages[i],
+                                          timeFormat: widget.timeFormat,
+                                          messageImageBuilder:
+                                              widget.messageImageBuilder,
+                                          messageTextBuilder:
+                                              widget.messageTextBuilder,
+                                          messageTimeBuilder:
+                                              widget.messageTimeBuilder,
+                                          messageContainerDecoration:
+                                              widget.messageContainerDecoration,
+                                          parsePatterns: widget.parsePatterns,
+                                        ),
+                                ),
                               ),
                               if (widget.showuserAvatar)
                                 Padding(
